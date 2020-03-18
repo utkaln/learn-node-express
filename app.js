@@ -5,45 +5,23 @@ const app = express();
 //default port at 3000, otherwise specify port in env setting in package.json
 const port = process.env.PORT || 3000;
 
-// user express provider router object
-const bookRouter = express.Router();
 
 //mongoose provides all interfaces with mongo db
 const mongoose = require('mongoose');
 
+
 //for mongo version 4 or higher need the second param under connect method
-const db = mongoose.connect('mongodb://localhost:27017/bookAPI',{useNewUrlParser:true});
+const db = mongoose.connect('mongodb://localhost:27017/bookAPI',{useNewUrlParser:true,useUnifiedTopology: true});
 //Custom schema defined in bookModel and imported here
 const Book = require('./models/bookModel');
 
-//intercepts url with /books path in it
-bookRouter.route('/books')
-.get((req,res) => {
-    //res.send('Welcome to my Nodemon API');
-    //const response = {hello: 'This is my API'};
-    //Find is internal method to look up and find everything from resultset
-    Book.find(req.query,(err,books) => {
-        if(err){
-            return res.send(err);
-        }
-        return res.json(books);
-    });   
+const bookRouter = require('./routes/bookRouter')(Book);
 
-});
+//import body parser to manipulate req.body
+const bodyParser = require('body-parser');
 
-//url with books followed by db object id
-bookRouter.route('/books/:bookId')
-.get((req,res) => {
-    //res.send('Welcome to my Nodemon API');
-    //const response = {hello: 'This is my API'};
-    Book.findById(req.params.bookId,(err,books) => {
-        if(err){
-            return res.send(err);
-        }
-        return res.json(books);
-    });   
-
-});
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 
 //register router path with pattern /api
 app.use('/api',bookRouter);
