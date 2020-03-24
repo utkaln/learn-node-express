@@ -4,7 +4,8 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha tests/**/*Tests.js",
+    "lint": "eslint ."
   },
   "author": "Utkal Nayak",
   "license": "ISC",
@@ -12,6 +13,21 @@
   "dependencies": {
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
-    "mongoose": "^5.9.3"
+    "mongoose": "^5.9.3",
+    "nodemon": "^2.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.1",
+    "mocha": "^7.1.1",
+    "should": "^13.2.3",
+    "sinon": "^9.0.1"
+  },
+  "nodemonConfig": {
+    "env": {
+      "NODE_ENV": "development",
+      "PORT": 3000
+    }
   }
 }
